@@ -5,13 +5,13 @@ var state = {
 };
 
 var questionTemplate =(
-
+	'<div class = "questions-answers">' +
 	'<div class = "question-render"></div>' +
 	'<div class="answer-choices">' +
 	'<div class="answer-a"></div>' +
 	'<div class="answer-b"></div>' +
 	'<div class="answer-c"></div>' +
-	'<div class="answer-d"></div>' +
+	'<div class="answer-d"></div></div>' +
 	'</div>'
 );
 
@@ -49,18 +49,37 @@ var fiveB = "store as few things in variables as possible";
 var fiveC = "store as many things in variables as possible";
 var fiveD = "have as many functions as humanly possible";
 
-//state management
+//store questions in an array
+var questionArray = [questionOne, questionTwo, questionThree, questionFour, questionFive];
+
+//store answers in an array
+var answerArray = [oneA, oneB, oneC, oneD, twoA, twoB, twoC, twoD, threeA, threeB, threeC, threeD, fourA, +
+fourB, fourC, fourD, fiveA, fiveB, fiveC, fiveD];
+
+
+//modify state
+
 
 var addQuestion = function(state, question) {
-    state.questions.push({
+    
+    	state.questions.push({
     	question: question,
     	answered: false,
     	correct: Boolean
     });
+
+
 };
 
 var addAnswerChoices = function(state, answer){
-	state.answers.push();
+	answer.map(function(answerChoice){
+		state.answers.push({
+			answer: answerChoice,
+			correct: Boolean,
+		})
+	})
+	
+	console.log(state.answers);
 };
 
 //removal of button.  we'll fit this in to state management later
@@ -79,8 +98,8 @@ function startQuiz(){
 function renderQuestionAnswers(){
 	console.log("yaaayyy");
 	var element = $(questionTemplate);
-	element.find('.question-render').text("Test");
-
+	element.find('div').text(questionOne);
+	
 	$('.button-questions-answers').html(element);
 }
 $(document).ready(function(){
@@ -88,6 +107,8 @@ $(document).ready(function(){
 		state.startedQuiz = true;
 		removeButton();
 		renderQuestionAnswers();
+		addQuestion(state, questionArray[0]);
+		addAnswerChoices(state, answerArray.slice(0,4));
 	})
 
 })
