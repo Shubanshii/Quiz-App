@@ -72,14 +72,13 @@ var addQuestion = function(state, question) {
 };
 
 var addAnswerChoices = function(state, answer){
-	answer.map(function(answerChoice){
+	answer.forEach(function(answerChoice){
 		state.answers.push({
 			answer: answerChoice,
 			correct: Boolean,
 		})
 	})
 	
-	console.log(state.answers);
 };
 
 //removal of button.  we'll fit this in to state management later
@@ -96,19 +95,25 @@ function startQuiz(){
 }
 
 function renderQuestionAnswers(){
-	console.log("yaaayyy");
+	console.log(state.answers[0].answer);
 	var element = $(questionTemplate);
-	element.find('div').text(questionOne);
-	
+	element.find('.question-render').text(questionOne);
+	element.find('.answer-a').text(state.answers[0].answer);
+	element.find('.answer-b').text(state.answers[1].answer);
+	element.find('.answer-c').text(state.answers[2].answer);
+	element.find('.answer-d').text(state.answers[3].answer);
+
+
 	$('.button-questions-answers').html(element);
 }
 $(document).ready(function(){
 	$("button").on('click', function(event){
 		state.startedQuiz = true;
 		removeButton();
-		renderQuestionAnswers();
 		addQuestion(state, questionArray[0]);
 		addAnswerChoices(state, answerArray.slice(0,4));
+		renderQuestionAnswers();
+
 	})
 
 })
