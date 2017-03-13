@@ -1,0 +1,23 @@
+body {
+	background-color: #00e5ff;
+}
+
+.heading-title {
+	text-align: center;
+	background-color: blue;
+}
+
+button {
+    margin:0 auto;
+    display:block;
+    height: 100px;
+    width: 100px;
+    font-size: 30px;
+    vertical-align: middle;
+    margin-top: 200px;
+    background-color: paleturquoise;
+}
+
+div{
+	height: 555px;
+}
