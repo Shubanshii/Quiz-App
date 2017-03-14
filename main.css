@@ -21,3 +21,10 @@ button {
 /*div{
 	height: 555px;
 }*/ 
+.green-background {
+    background-color: green;
+}
+
+.red-background {
+    background-color: red;
+}

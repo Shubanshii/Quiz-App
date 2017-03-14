@@ -1,19 +1,41 @@
 var state = {
   startedQuiz: false,
-  questions: [],
-  answers: []
+  questions: [{description: "a question", answers: [{txt: 'answer 1', correct: true}, 
+    {txt: 'answer 2', correct: false}, {txt: 'answer 3', correct: false}, 
+    {txt: 'answer 4', correct: false}] },
+    {description: "a question 2", answers: [{txt: 'answer 1', correct: false}, 
+    {txt: 'answer 2', correct: true}] }],
+  correctAnswers: 0,
+  incorrectAnswers: 0
+  
 };
 
 var questionTemplate =(
 	'<div class = "questions-answers">' +
 	'<div class = "question-render"></div>' +
 	'<div class="answer-choices">' +
-	'<div class="answer-a"></div>' +
-	'<div class="answer-b"></div>' +
-	'<div class="answer-c"></div>' +
-	'<div class="answer-d"></div></div>' +
+	'<input type="radio" name="answer" id="ans-a" value=' + state.questions[0].answers[0].correct + '>' +
+	'<label for="answer-a" id="answer-a"></label><br>' +
+	'<input type="radio" name="answer" id="ans-b" value=' + state.questions[0].answers[1].correct + '>' +
+	'<label for="answer-b" id="answer-b"></label><br>' +
+	'<input type="radio" name="answer" id="ans-c" value=' + state.questions[0].answers[2].correct + '>' +
+	'<label for="answer-c" id="answer-c"></label><br>' +
+	'<input type="radio" name="answer" id="ans-d" value=' + state.questions[0].answers[3].correct + '>' +
+	'<label for="answer-d" id="answer-d"></label></div>' +
 	'</div>'
 );
+
+var questionsAnsweredTemplate = (
+		'div class = "questions-answered"></div>'
+	);
+
+var submitTemplate = (
+	 '<button type="submit" id="submit">' +
+	 'Submit' +
+	 '</button>'
+
+	);
+
 
 //question text
 var questionOne = "What does it mean to 'isolate state management'?";
@@ -95,28 +117,65 @@ function startQuiz(){
 }
 
 function renderQuestionAnswers(){
-	console.log(state.answers[0].answer);
 	var element = $(questionTemplate);
-	element.find('.question-render').text(questionOne);
-	element.find('.answer-a').text(state.answers[0].answer);
-	element.find('.answer-b').text(state.answers[1].answer);
-	element.find('.answer-c').text(state.answers[2].answer);
-	element.find('.answer-d').text(state.answers[3].answer);
-
-
-	$('.button-questions-answers').html(element);
+	element.find('.question-render').text(state.questions[0].description);
+	element.find('#answer-a').text(state.questions[0].answers[0].txt);
+	element.find('#answer-b').text(state.questions[0].answers[1].txt);
+	element.find('#answer-c').text(state.questions[0].answers[2].txt);
+	element.find('#answer-d').text(state.questions[0].answers[3].txt);
+	
+	$('.questions-answers').html(element);
 }
+
+function renderQuestionsAnswered() {
+	$('.questions-answered').text('1 out of 5');
+
+}
+function renderScore(){
+	$('.score').text('0 correct, 0 incorrect');
+}
+
+function renderButtons(){
+	$('.buttons').html(submitTemplate);
+}
+
+function renderCorrectAnswer(){
+	$('#answer-a').addClass('green-background')
+}
+function renderIncorrectAnswer() {
+	$('input[name=answer]:checked').next().addClass('red-background')
+}
+
 $(document).ready(function(){
 	$("button").on('click', function(event){
 		state.startedQuiz = true;
 		removeButton();
-		addQuestion(state, questionArray[0]);
-		addAnswerChoices(state, answerArray.slice(0,4));
+		//addQuestion(state, questionArray[0]);
+		//addAnswerChoices(state, answerArray.slice(0,4));
 		renderQuestionAnswers();
-
+		renderQuestionsAnswered();
+		renderScore();
+		renderButtons();
 	})
-
+	$('main').on('click', '#submit', function(event){
+		event.preventDefault();
+		console.log("submission working");
+		console.log($('input[name=answer]:checked').val());
+		var checkVal = $('input[name=answer]:checked').val()
+		if(checkVal === 'true')
+		{
+			renderCorrectAnswer();
+		}
+		else{
+			console.log("else is working");	
+			renderCorrectAnswer();
+			renderIncorrectAnswer();	
+		}
+	})
+	
 })
+
+
 
 //DOM Manipulation
 
