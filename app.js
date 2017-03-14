@@ -36,6 +36,11 @@ var submitTemplate = (
 
 	);
 
+var nextTemplate = (
+	'<button id="next">' +
+	'Next' +
+	'</button>'
+	);
 
 //question text
 var questionOne = "What does it mean to 'isolate state management'?";
@@ -104,11 +109,11 @@ var addAnswerChoices = function(state, answer){
 };
 
 //removal of button.  we'll fit this in to state management later
-function removeButton(){
-	console.log("working");
-	if(state.startedQuiz === true){
-		$('.button-questions-answers').html('');
-	}
+
+
+function removeSubmit(){
+
+
 }
 //starts quiz should start sending the question variables to add them to state
 function startQuiz(){
@@ -132,11 +137,16 @@ function renderQuestionsAnswered() {
 
 }
 function renderScore(){
-	$('.score').text('0 correct, 0 incorrect');
+	$('.score').text(state.correctAnswers + ' correct, ' + state.incorrectAnswers + ' incorrect');
 }
 
-function renderButtons(){
+function renderButton(){
 	$('.buttons').html(submitTemplate);
+}
+
+function renderNext(){
+
+	$('#submit').replaceWith(nextTemplate);
 }
 
 function renderCorrectAnswer(){
@@ -149,13 +159,13 @@ function renderIncorrectAnswer() {
 $(document).ready(function(){
 	$("button").on('click', function(event){
 		state.startedQuiz = true;
-		removeButton();
+		//removeButton();
 		//addQuestion(state, questionArray[0]);
 		//addAnswerChoices(state, answerArray.slice(0,4));
 		renderQuestionAnswers();
 		renderQuestionsAnswered();
 		renderScore();
-		renderButtons();
+		renderButton();
 	})
 	$('main').on('click', '#submit', function(event){
 		event.preventDefault();
@@ -165,11 +175,18 @@ $(document).ready(function(){
 		if(checkVal === 'true')
 		{
 			renderCorrectAnswer();
+			state.correctAnswers++;
+			renderScore();
+			removeSubmit();
+			renderNext();
 		}
 		else{
 			console.log("else is working");	
 			renderCorrectAnswer();
-			renderIncorrectAnswer();	
+			renderIncorrectAnswer();
+			state.incorrectAnswers++;	
+			renderScore();
+			renderNext();
 		}
 	})
 	
