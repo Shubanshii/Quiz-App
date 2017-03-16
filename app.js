@@ -3,16 +3,16 @@ var state = {
   questions: [{description: "a question", answers: [{txt: 'answer 1', correct: true}, 
     {txt: 'answer 2', correct: false}, {txt: 'answer 3', correct: false}, 
     {txt: 'answer 4', correct: false}] },
-    {description: "a question 2", answers: [{txt: 'answer 1', correct: false}, 
+    {description: "a question 2", answers: [{txt: 'answer 5', correct: false}, 
+    {txt: 'answer 6', correct: true}, {txt: 'answer 7', correct: false}, 
+    {txt: 'answer 8', correct: false}] },
+    {description: "a question 3", answers: [{txt: 'answer 9', correct: false}, 
     {txt: 'answer 2', correct: true}, {txt: 'answer 3', correct: false}, 
     {txt: 'answer 4', correct: false}] },
-    {description: "a question 3", answers: [{txt: 'answer 1', correct: false}, 
-    {txt: 'answer 2', correct: true}, {txt: 'answer 3', correct: false}, 
-    {txt: 'answer 4', correct: false}] },
-    {description: "a question 4", answers: [{txt: 'answer 1', correct: false}, 
+    {description: "a question 4", answers: [{txt: 'answer 19', correct: false}, 
     {txt: 'answer 2', correct: false}, {txt: 'answer 3', correct: false}, 
     {txt: 'answer 4', correct: true}] },
-    {description: "a question 5", answers: [{txt: 'answer 1', correct: false}, 
+    {description: "a question 5", answers: [{txt: 'answer 20', correct: false}, 
     {txt: 'answer 2', correct: false}, {txt: 'answer 3', correct: true}, 
     {txt: 'answer 4', correct: false}] }],
   correctAnswers: 0,
@@ -21,20 +21,7 @@ var state = {
   
 };
 
-var questionTemplate =(
-	'<div class = "questions-answers">' +
-	'<div class = "question-render"></div>' +
-	'<div class="answer-choices">' +
-	'<input type="radio" name="answer" id="ans-a" value=' + state.questions[state.questionIndex].answers[0].correct + '>' +
-	'<label for="answer-a" id="answer-a"></label><br>' +
-	'<input type="radio" name="answer" id="ans-b" value=' + state.questions[state.questionIndex].answers[1].correct + '>' +
-	'<label for="answer-b" id="answer-b"></label><br>' +
-	'<input type="radio" name="answer" id="ans-c" value=' + state.questions[state.questionIndex].answers[2].correct + '>' +
-	'<label for="answer-c" id="answer-c"></label><br>' +
-	'<input type="radio" name="answer" id="ans-d" value=' + state.questions[state.questionIndex].answers[3].correct + '>' +
-	'<label for="answer-d" id="answer-d"></label></div>' +
-	'</div>'
-);
+
 
 var questionsAnsweredTemplate = (
 		'div class = "questions-answered"></div>'
@@ -127,6 +114,20 @@ var addAnswerChoices = function(state, answer){
 
 
 function renderQuestionAnswers(){
+	var questionTemplate =(
+	'<div class = "questions-answers">' +
+	'<div class = "question-render"></div>' +
+	'<div class="answer-choices">' +
+	'<input type="radio" name="answer" id="ans-a" class="answer-inputs" value=' + state.questions[state.questionIndex].answers[0].correct + '>' +
+	'<label for="answer-a" id="answer-a"></label><br>' +
+	'<input type="radio" name="answer" id="ans-b" class="answer-inputs" value=' + state.questions[state.questionIndex].answers[1].correct + '>' +
+	'<label for="answer-b" id="answer-b"></label><br>' +
+	'<input type="radio" name="answer" id="ans-c" class="answer-inputs" value=' + state.questions[state.questionIndex].answers[2].correct + '>' +
+	'<label for="answer-c" id="answer-c"></label><br>' +
+	'<input type="radio" name="answer" id="ans-d" class="answer-inputs" value=' + state.questions[state.questionIndex].answers[3].correct + '>' +
+	'<label for="answer-d" id="answer-d"></label></div>' +
+	'</div>'
+);
 	var element = $(questionTemplate);
 	element.find('.question-render').text(state.questions[state.questionIndex].description);
 	element.find('#answer-a').text(state.questions[state.questionIndex].answers[0].txt);
@@ -186,7 +187,8 @@ $(document).ready(function(){
 		event.preventDefault();
 		console.log("submission working");
 		console.log($('input[name=answer]:checked').val());
-		var checkVal = $('input[name=answer]:checked').val()
+		checkVal = $('input[name=answer]:checked').val()
+
 		if(checkVal === 'true')
 		{
 			renderCorrectAnswer();
@@ -210,10 +212,12 @@ $(document).ready(function(){
 
 		}
 		state.questionIndex++;
+		$('input[name="correctAnswer"]').attr('checked', false);
+		renderButton();	
+
 		renderQuestionAnswers();
 		renderQuestionsAnswered();
 		renderScore();
-		renderButton();	
 
 	})
 	
