@@ -4,9 +4,20 @@ var state = {
     {txt: 'answer 2', correct: false}, {txt: 'answer 3', correct: false}, 
     {txt: 'answer 4', correct: false}] },
     {description: "a question 2", answers: [{txt: 'answer 1', correct: false}, 
-    {txt: 'answer 2', correct: true}] }],
+    {txt: 'answer 2', correct: true}, {txt: 'answer 3', correct: false}, 
+    {txt: 'answer 4', correct: false}] },
+    {description: "a question 3", answers: [{txt: 'answer 1', correct: false}, 
+    {txt: 'answer 2', correct: true}, {txt: 'answer 3', correct: false}, 
+    {txt: 'answer 4', correct: false}] },
+    {description: "a question 4", answers: [{txt: 'answer 1', correct: false}, 
+    {txt: 'answer 2', correct: false}, {txt: 'answer 3', correct: false}, 
+    {txt: 'answer 4', correct: true}] },
+    {description: "a question 5", answers: [{txt: 'answer 1', correct: false}, 
+    {txt: 'answer 2', correct: false}, {txt: 'answer 3', correct: true}, 
+    {txt: 'answer 4', correct: false}] }],
   correctAnswers: 0,
-  incorrectAnswers: 0
+  incorrectAnswers: 0,
+  questionIndex: 0
   
 };
 
@@ -14,13 +25,13 @@ var questionTemplate =(
 	'<div class = "questions-answers">' +
 	'<div class = "question-render"></div>' +
 	'<div class="answer-choices">' +
-	'<input type="radio" name="answer" id="ans-a" value=' + state.questions[0].answers[0].correct + '>' +
+	'<input type="radio" name="answer" id="ans-a" value=' + state.questions[state.questionIndex].answers[0].correct + '>' +
 	'<label for="answer-a" id="answer-a"></label><br>' +
-	'<input type="radio" name="answer" id="ans-b" value=' + state.questions[0].answers[1].correct + '>' +
+	'<input type="radio" name="answer" id="ans-b" value=' + state.questions[state.questionIndex].answers[1].correct + '>' +
 	'<label for="answer-b" id="answer-b"></label><br>' +
-	'<input type="radio" name="answer" id="ans-c" value=' + state.questions[0].answers[2].correct + '>' +
+	'<input type="radio" name="answer" id="ans-c" value=' + state.questions[state.questionIndex].answers[2].correct + '>' +
 	'<label for="answer-c" id="answer-c"></label><br>' +
-	'<input type="radio" name="answer" id="ans-d" value=' + state.questions[0].answers[3].correct + '>' +
+	'<input type="radio" name="answer" id="ans-d" value=' + state.questions[state.questionIndex].answers[3].correct + '>' +
 	'<label for="answer-d" id="answer-d"></label></div>' +
 	'</div>'
 );
@@ -111,29 +122,23 @@ var addAnswerChoices = function(state, answer){
 //removal of button.  we'll fit this in to state management later
 
 
-function removeSubmit(){
 
-
-}
 //starts quiz should start sending the question variables to add them to state
-function startQuiz(){
 
-
-}
 
 function renderQuestionAnswers(){
 	var element = $(questionTemplate);
-	element.find('.question-render').text(state.questions[0].description);
-	element.find('#answer-a').text(state.questions[0].answers[0].txt);
-	element.find('#answer-b').text(state.questions[0].answers[1].txt);
-	element.find('#answer-c').text(state.questions[0].answers[2].txt);
-	element.find('#answer-d').text(state.questions[0].answers[3].txt);
+	element.find('.question-render').text(state.questions[state.questionIndex].description);
+	element.find('#answer-a').text(state.questions[state.questionIndex].answers[0].txt);
+	element.find('#answer-b').text(state.questions[state.questionIndex].answers[1].txt);
+	element.find('#answer-c').text(state.questions[state.questionIndex].answers[2].txt);
+	element.find('#answer-d').text(state.questions[state.questionIndex].answers[3].txt);
 	
 	$('.questions-answers').html(element);
 }
 
 function renderQuestionsAnswered() {
-	$('.questions-answered').text('1 out of 5');
+	$('.questions-answered').text((state.questionIndex+1) + ' out of 5');
 
 }
 function renderScore(){
@@ -150,7 +155,17 @@ function renderNext(){
 }
 
 function renderCorrectAnswer(){
-	$('#answer-a').addClass('green-background')
+		var ansA = $('#answer-a');
+		var ansB = $('#answer-b');
+		var ansC = $('#answer-c');
+		var ansD = $('#answer-d');
+		var ansArray = [ansA, ansB, ansC, ansD];
+	state.questions[state.questionIndex].answers.forEach(function (answer, index){
+
+		if(answer.correct === true){
+			$(ansArray[index]).addClass('green-background')		}
+	})
+	//$('#answer-a').addClass('green-background')
 }
 function renderIncorrectAnswer() {
 	$('input[name=answer]:checked').next().addClass('red-background')
@@ -177,7 +192,6 @@ $(document).ready(function(){
 			renderCorrectAnswer();
 			state.correctAnswers++;
 			renderScore();
-			removeSubmit();
 			renderNext();
 		}
 		else{
@@ -188,6 +202,19 @@ $(document).ready(function(){
 			renderScore();
 			renderNext();
 		}
+	})
+
+	$('main').on('click', '#next', function(event){
+		if(state.questionIndex===4){
+			    location.reload();
+
+		}
+		state.questionIndex++;
+		renderQuestionAnswers();
+		renderQuestionsAnswered();
+		renderScore();
+		renderButton();	
+
 	})
 	
 })
